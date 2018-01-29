@@ -1,4 +1,4 @@
-# Badylarz
+﻿# Badylarz
 
-Progres - cały odcinek 3 został zaklepany... chyba
-Link do 3 odcnika https://www.youtube.com/watch?v=n2DXF1ifUbU
+Playlista https://www.youtube.com/playlist?list=PLPV2KyIb3jR4u5jX8za5iU1cqnQPmbzG0
+Progress w comitach

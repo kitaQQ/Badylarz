@@ -5,6 +5,7 @@ using UnityEngine;
 public class Turret : MonoBehaviour {
 
     private Transform target;
+    private Enemy targetEnemy;
 
     [Header("General")]
 
@@ -18,6 +19,10 @@ public class Turret : MonoBehaviour {
     [Header("Use Laser")]
     public bool useLaser = false;
     public LineRenderer lineRenderer;
+    public ParticleSystem impactEffect;
+    public Light impactLight;
+    public int damageOverTime = 30;
+    public float slowAmount = 0.5f;
 
     [Header("Unity Setup Fields")]
 
@@ -31,7 +36,13 @@ public class Turret : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
-	}
+
+        if (useLaser)
+        {
+            impactEffect.Stop();
+            impactLight.enabled = false;
+        }
+    }
 
     void UpdateTarget()
     {
@@ -53,6 +64,7 @@ public class Turret : MonoBehaviour {
         if(nearestEnemy != null && shortestDistance <= range)
         {
             target = nearestEnemy.transform;
+            targetEnemy = nearestEnemy.GetComponent<Enemy>();
         }
         else
         {
@@ -62,6 +74,7 @@ public class Turret : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        Debug.Log("Update");
 		if (target == null)
         {
             if (useLaser)
@@ -69,6 +82,8 @@ public class Turret : MonoBehaviour {
                 if (lineRenderer.enabled)
                 {
                     lineRenderer.enabled = false;
+                    impactEffect.Stop();
+                    impactLight.enabled = false;
                 }
             }
 
@@ -105,12 +120,25 @@ public class Turret : MonoBehaviour {
 
     void Laser()
     {
+        targetEnemy.TakeDamage(damageOverTime * Time.deltaTime);
+        targetEnemy.Slow(slowAmount);
+
         if (!lineRenderer.enabled)
         {
             lineRenderer.enabled = true;
+            impactEffect.Play();
+            impactLight.enabled = true;
         }
         lineRenderer.SetPosition(0, firePoint.position);
         lineRenderer.SetPosition(1, target.position);
+
+        Vector3 dir = firePoint.position - target.position;
+
+        impactEffect.transform.position = target.position + dir.normalized;
+
+        impactEffect.transform.rotation = Quaternion.LookRotation(dir);
+
+        
     }
 
     void Shoot()

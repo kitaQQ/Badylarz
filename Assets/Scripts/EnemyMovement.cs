@@ -27,6 +27,38 @@ public class EnemyMovement : MonoBehaviour {
             GetNextWaypoint();
         }
 
+        //Gdy przeciwnik jest blisko kazdy przeciwnik dostaje obrazenia obrazenia DOT ale bardzo male i sa spowalniani
+        GameObject player = GameObject.FindGameObjectsWithTag("Player")[0];
+        if (Vector3.Distance(transform.position, player.transform.position) <= 4f)
+        {
+            enemy.speed = 1f;
+            enemy.startSpeed = 1f;
+            enemy.TakeDamage(PlayerStats.aoeDamage * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, player.transform.position) >= 2.5f)
+            {
+                Debug.Log("Leaving");
+                enemy.speed = enemy.speedBeforeStop;
+                enemy.startSpeed = enemy.speedBeforeStop;
+            }
+        }
+
+        //Atakowanie okreslonego przeciwnika obrazenia DOT
+        if(enemy.hasInteract)
+        {
+            enemy.speed = 0f;
+            enemy.startSpeed = 0f;
+            enemy.TakeDamage(PlayerStats.directDamage * Time.deltaTime);
+            PlayerStats.heroHealth -= enemy.atackPower * Time.deltaTime;
+
+            if(Vector3.Distance(transform.position, player.transform.position) >= 2.5f)
+            {
+                Debug.Log("Leaving");
+                enemy.speed = enemy.speedBeforeStop;
+                enemy.startSpeed = enemy.speedBeforeStop;
+                enemy.hasInteract = false;
+            }
+        }
         enemy.speed = enemy.startSpeed;
     }
 

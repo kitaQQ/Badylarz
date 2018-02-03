@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : Interactable {
 
     public float startSpeed = 10f;
     [HideInInspector]
@@ -13,9 +13,17 @@ public class Enemy : MonoBehaviour {
 
     public GameObject deathEffect;
 
+    public bool hasInteract;
+
+    public float speedBeforeStop;
+
+    public float atackPower = 1f;
+
     private void Start()
     {
         speed = startSpeed;
+        speedBeforeStop = speed;
+        hasInteract = false;
     }
 
     public void TakeDamage(float amount)
@@ -41,6 +49,28 @@ public class Enemy : MonoBehaviour {
         
         Destroy(gameObject);
     }
+
+    public override void Interact()
+    {
+        speedBeforeStop = speed;
+        hasInteract = true;
+        Debug.Log("Interacting with ennemy");
+    }
+
+    //private void Update()
+    //{
+    //    if (hasInteract)
+    //    {
+    //        GameObject player = GameObject.FindGameObjectsWithTag("Player")[0];
+    //        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+    //        if (distanceToPlayer > 2f)
+    //        {
+    //            startSpeed = 10f;
+    //            speed = 10f;
+    //            hasInteract = false;
+    //        }
+    //    }
+    //}
 
 
 }

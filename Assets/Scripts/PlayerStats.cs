@@ -13,10 +13,13 @@ public class PlayerStats : MonoBehaviour {
     public static float aoeDamage = 5f;
     public static float directDamage = 30f;
 
+    public static int Rounds;
+
     void Start()
     {
         Money = startMoney;
         Lives = startLives;
         heroHealth = startHeroHealth;
+        Rounds = 0;
     }
 }
